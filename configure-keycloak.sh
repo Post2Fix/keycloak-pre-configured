@@ -122,40 +122,41 @@ echo "Add $USER_ID to group1 ran"
 
 #-----# Configure OIDC clients #----#
 
-# Configure general API OIDC client to authorize calls through Kong
-CLIENT_KONG_PAYLOAD='{
-  "clientId": "kong",
-  "enabled": true,
-  "protocol": "openid-connect",
-  "publicClient": false,
-  "secret": "secret-kong",
-  "redirectUris": ["/mock/*"],
-  "rootUrl": "https://localhost:8443",
-  "attributes": {
-    "clientAuthenticatorType": "client-secret"
-  },
-  "serviceAccountsEnabled": true
-}'
-CLIENT_KONG_RESPONSE=$(curl -s -X POST "$KEYCLOAK_URL/admin/realms/newrealm/clients" \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $ADMIN_TOKEN" \
-    -d "$CLIENT_KONG_PAYLOAD")
-#check_value "$CLIENT_KONG_RESPONSE" "Kong Client setup response"
+# # Configure general API OIDC client to authorize calls through Kong
+# CLIENT_KONG_PAYLOAD='{
+#   "clientId": "kong",
+#   "enabled": true,
+#   "protocol": "openid-connect",
+#   "publicClient": false,
+#   "secret": "secret-kong",
+#   "redirectUris": ["/mock/*"],
+#   "rootUrl": "https://localhost:8443",
+#   "attributes": {
+#     "clientAuthenticatorType": "client-secret"
+#   },
+#   "serviceAccountsEnabled": true
+# }'
+# CLIENT_KONG_RESPONSE=$(curl -s -X POST "$KEYCLOAK_URL/admin/realms/newrealm/clients" \
+#     -H "Content-Type: application/json" \
+#     -H "Authorization: Bearer $ADMIN_TOKEN" \
+#     -d "$CLIENT_KONG_PAYLOAD")
 
-# Configure Admin OIDC Client to authorize administrative access
-CLIENT_MYAPP_PAYLOAD='{
-  "clientId": "myapp",
-  "enabled": true,
-  "protocol": "openid-connect",
-  "publicClient": false,
-  "secret": "secret-myapp",
-  "redirectUris": ["http://myapp"]
-}'
-echo "Ran admin OIDC client configuration"
+# # check_value "$CLIENT_KONG_RESPONSE" "Kong Client setup response"
 
-CLIENT_MYAPP_RESPONSE=$(curl -s -X POST "$KEYCLOAK_URL/admin/realms/newrealm/clients" \
-    -H "Content-Type: application.json" \
-    -H "Authorization: Bearer $ADMIN_TOKEN" \
-    -d "$CLIENT_MYAPP_PAYLOAD")
-#check_value "$CLIENT_MYAPP_RESPONSE" "MyApp Client setup response"
-echo "Realm, Users, Clients, and Group configurations ran"
+# # Configure Admin OIDC Client to authorize administrative access
+# CLIENT_MYAPP_PAYLOAD='{
+#   "clientId": "myapp",
+#   "enabled": true,
+#   "protocol": "openid-connect",
+#   "publicClient": false,
+#   "secret": "secret-myapp",
+#   "redirectUris": ["http://myapp"]
+# }'
+# echo "Ran admin OIDC client configuration"
+
+# CLIENT_MYAPP_RESPONSE=$(curl -s -X POST "$KEYCLOAK_URL/admin/realms/newrealm/clients" \
+#     -H "Content-Type: application.json" \
+#     -H "Authorization: Bearer $ADMIN_TOKEN" \
+#     -d "$CLIENT_MYAPP_PAYLOAD")
+# #check_value "$CLIENT_MYAPP_RESPONSE" "MyApp Client setup response"
+# echo "Realm, Users, Clients, and Group configurations ran"
