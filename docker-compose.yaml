@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 services:
 
@@ -39,8 +39,6 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: password
     ports:
       - "8080:8080"  # Port mapping for Web UI
-    depends_on:
-      - kong-db
     networks:
       - api-gateway-network
     volumes:
