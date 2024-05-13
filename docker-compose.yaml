@@ -2,6 +2,16 @@
 
 services:
 
+#----# Flask SAML app #----#
+
+  flask-saml-sp:
+    build: ./Dockerfile-flask
+    ports:
+      - "5000:5000"
+    networks:
+      - api-gateway-network
+
+
 #----# Simple web-based UI database admin tool #----#
 
   adminer:
