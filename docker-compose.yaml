@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+
+#----# Simple web-based UI database admin tool #----#
+
+  adminer:
+    image: adminer
+    restart: unless-stopped  # Always restart unless manually stopped
+    ports:
+      - 8888:8080  # Map port 8080 in the container to port 8888 on the host
+    networks:
+      - api-gateway-network
+
+#----# Keycloak containers configurations #----#
+
+  # PostgreSQL service for Keycloak
+  keycloak-db:
+    image: postgres:latest
+    volumes:
+      - keycloak-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    networks:
+      - api-gateway-network
+
+  # Keycloak identity and access management
+  keycloak:
+    image: bitnami/keycloak:latest
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: keycloak-db
+      DB_DATABASE: keycloak_db
+      DB_USER: admin
+      DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+    ports:
+      - "8080:8080"  # Port mapping for Web UI
+    depends_on:
+      - kong-db
+    networks:
+      - api-gateway-network
+    volumes:
+      - keycloak_data:/bitnami/keycloak
+      # Auto generated cert and key
+      - ./certs/keycloak.crt:/etc/x509/https/tls.crt
+      - ./certs/keycloak.key:/etc/x509/https/tls.key
+
+#----# Network configurations #----#
+
+networks:
+  api-gateway-network:
+    driver: bridge  # Uses bridge networking (for running everything on a single computer))
+
+#----# Volumes configurations #----#
+
+volumes:
+  keycloak-db: {}
+  keycloak_data: {}
